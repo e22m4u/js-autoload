@@ -30,7 +30,7 @@ async function getFilesRecursively(dirPath, arrayOfFiles = []) {
  * @param   {...any} args          Аргументы, которые будут переданы в каждую функцию при вызове.
  * @returns {Promise<void>}
  */
-export async function invokeFunctionsFromDir(directoryPath, ...args) {
+export async function invokeFromDir(directoryPath, ...args) {
   // рекурсивный сбор всех файлов в директории
   const allFiles = await getFilesRecursively(directoryPath);
   // фильтрация, остаются только JS файлы,

@@ -31,18 +31,18 @@ npm install @e22m4u/js-autoload
 *ESM*
 
 ```js
-import {invokeFunctionsFromDir} from '@e22m4u/js-autoload';
+import {invokeFromDir} from '@e22m4u/js-autoload';
 ```
 
 *CommonJS*
 
 ```js
-const {invokeFunctionsFromDir} = require('@e22m4u/js-autoload');
+const {invokeFromDir} = require('@e22m4u/js-autoload');
 ```
 
 ## Использование
 
-Функция `invokeFunctionsFromDir` обходит указанную директорию, находит
+Функция `invokeFromDir` обходит указанную директорию, находит
 *JavaScript*-файлы, импортирует их и вызывает функцию, если она передана
 как экспорт по умолчанию (`export default ...`). 
 
@@ -70,47 +70,47 @@ export default function(context) {
 
 ```js
 export default async (context) => {
-  context.status = "done";
+  context.status = 'done';
 };
 ```
 
 Содержимое `index.js`
 
 ```js
-import {invokeFunctionsFromDir} from '@e22m4u/js-autoload';
+import {invokeFromDir} from '@e22m4u/js-autoload';
 
 const appState = {
   initialized: false,
-  status: "pending"
+  status: 'pending',
 };
 
-await invokeFunctionsFromDir(`${import.meta.dirname}/scripts`, appState);
+await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
 
 // для common.js
 // const path = require('path');
-// await invokeFunctionsFromDir(path.join(__dirname, './scripts'), appState);
+// await invokeFromDir(path.join(__dirname, './scripts'), appState);
 
 console.log(appState); 
-// { initialized: true, status: "done" }
+// { initialized: true, status: 'done' }
 ```
 
 ### Передача аргументов
 
-Функция `invokeFunctionsFromDir` принимает неограниченное количество аргументов
+Функция `invokeFromDir` принимает неограниченное количество аргументов
 после пути к директории. Все переданные аргументы будут отправлены в каждую
 вызываемую функцию без изменений.
 
 ```js
 import path from 'node:path';
-import {invokeFunctionsFromDir} from '@e22m4u/js-autoload';
+import {invokeFromDir} from '@e22m4u/js-autoload';
 
 // ...
-await invokeFunctionsFromDir(path.resolve('./actions'), arg1, arg2, arg3);
+await invokeFromDir(path.resolve('./actions'), arg1, arg2, arg3);
 ```
 
 ### Правила обработки файлов
 
-При вызове `invokeFunctionsFromDir` применяются следующие правила:
+При вызове функции `invokeFromDir` применяются следующие правила:
 
 **Рекурсивность**  
 Обрабатываются все файлы в указанной директории и во всех вложенных каталогах.

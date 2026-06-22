@@ -2,14 +2,14 @@ import os from 'node:os';
 import {expect} from 'chai';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import {invokeFunctionsFromDir} from './autoload.js';
+import {invokeFromDir} from './autoload.js';
 
 const createTempDir = async function () {
   const tmpBase = path.join(os.tmpdir(), 'js-autoload-');
   return await fs.mkdtemp(tmpBase);
 };
 
-describe('invokeFunctionsFromDir', function () {
+describe('invokeFromDir', function () {
   it('should execute default export functions from files in numeric order', async function () {
     const tempDir = await createTempDir();
     try {
@@ -26,7 +26,7 @@ describe('invokeFunctionsFromDir', function () {
         'export default (ctx) => ctx.push("first")',
       );
       const context = [];
-      await invokeFunctionsFromDir(tempDir, context);
+      await invokeFromDir(tempDir, context);
       expect(context).to.deep.equal(['first', 'second', 'third']);
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
@@ -43,7 +43,7 @@ describe('invokeFunctionsFromDir', function () {
         'export default (ctx) => ctx.ran = true',
       );
       const context = {ran: false};
-      await invokeFunctionsFromDir(tempDir, context);
+      await invokeFromDir(tempDir, context);
       expect(context.ran).to.be.true;
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
@@ -58,7 +58,7 @@ describe('invokeFunctionsFromDir', function () {
         'export default (a, b, c) => { a.sum = b + c; }',
       );
       const result = {sum: 0};
-      await invokeFunctionsFromDir(tempDir, result, 10, 20);
+      await invokeFromDir(tempDir, result, 10, 20);
       expect(result.sum).to.equal(30);
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
@@ -74,7 +74,7 @@ describe('invokeFunctionsFromDir', function () {
       await fs.writeFile(path.join(tempDir, 'notes.txt'), script);
       await fs.writeFile(path.join(tempDir, 'valid.test.js'), script);
       await fs.writeFile(path.join(tempDir, 'valid.spec.js'), script);
-      await invokeFunctionsFromDir(tempDir, tracker);
+      await invokeFromDir(tempDir, tracker);
       expect(tracker.count).to.equal(1);
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
@@ -92,7 +92,7 @@ describe('invokeFunctionsFromDir', function () {
         }`,
       );
       const state = {done: false};
-      await invokeFunctionsFromDir(tempDir, state);
+      await invokeFromDir(tempDir, state);
       expect(state.done).to.be.true;
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
@@ -110,7 +110,7 @@ describe('invokeFunctionsFromDir', function () {
         path.join(tempDir, 'named-only.js'),
         'export const named = function() {}',
       );
-      await invokeFunctionsFromDir(tempDir);
+      await invokeFromDir(tempDir);
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
     }
@@ -123,7 +123,7 @@ describe('invokeFunctionsFromDir', function () {
         path.join(tempDir, 'class-export.js'),
         'export default class SomeClass {}',
       );
-      await invokeFunctionsFromDir(tempDir);
+      await invokeFromDir(tempDir);
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
     }
@@ -135,7 +135,7 @@ describe('invokeFunctionsFromDir', function () {
       'definitely-not-exists-12345',
     );
     try {
-      await invokeFunctionsFromDir(nonExistentPath);
+      await invokeFromDir(nonExistentPath);
       throw new Error('Should have failed');
     } catch (err) {
       expect(err.code).to.equal('ENOENT');

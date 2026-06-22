@@ -1,1 +1,1 @@
-export * from './invoke-functions-from-dir.js';
+export * from './invoke-from-dir.js';
