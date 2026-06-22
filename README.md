@@ -102,11 +102,10 @@ console.log(appState);
 вызываемую функцию без изменений.
 
 ```js
-import path from 'node:path';
 import {invokeFromDir} from '@e22m4u/js-autoload';
 
 // ...
-await invokeFromDir(path.resolve('./actions'), arg1, arg2, arg3);
+await invokeFromDir('./src/actions', arg1, arg2, arg3);
 ```
 
 ### Правила обработки файлов
