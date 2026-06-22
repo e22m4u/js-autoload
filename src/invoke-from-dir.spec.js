@@ -6,6 +6,11 @@ import {invokeFromDir} from './invoke-from-dir.js';
 
 const createTempDir = async function () {
   const tmpBase = path.join(os.tmpdir(), 'js-autoload-');
+  // Функция `fs.mkdtemp(prefix)` из встроенного модуля Node.js создает
+  // уникальную временную директорию. В качестве аргумента она принимает
+  // префикс пути, к которому Node.js автоматически добавляет 6 случайных
+  // символов, чтобы гарантировать уникальность папки (чтобы параллельные
+  // тесты не перезаписывали папки друг друга.
   return await fs.mkdtemp(tmpBase);
 };
 
