@@ -84,9 +84,10 @@ const appState = {
   status: 'pending',
 };
 
+// для ESM
 await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
 
-// для common.js
+// для CommonJS
 // const path = require('path');
 // await invokeFromDir(path.join(__dirname, './scripts'), appState);
 
