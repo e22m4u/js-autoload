@@ -59,7 +59,7 @@ export async function invokeFromDir(directoryPath, ...args) {
     const module = await import(fileUrl);
     // поиск экспорта по умолчанию и проверка, что это функция
     const isFunction = typeof module.default === 'function';
-    const isClass = isFunction && module.default.toString().startsWith('class');
+    const isClass = isFunction && /^\s*class\b/.test(module.default.toString());
     if (isFunction && !isClass) {
       // вызов функции и ожидание её завершения (если она асинхронная)
       await module.default(...args);

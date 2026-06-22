@@ -68,7 +68,7 @@ async function invokeFromDir(directoryPath, ...args) {
     const fileUrl = (0, import_node_url.pathToFileURL)(filePath).href;
     const module2 = await import(fileUrl);
     const isFunction = typeof module2.default === "function";
-    const isClass = isFunction && module2.default.toString().startsWith("class");
+    const isClass = isFunction && /^\s*class\b/.test(module2.default.toString());
     if (isFunction && !isClass) {
       await module2.default(...args);
     }
