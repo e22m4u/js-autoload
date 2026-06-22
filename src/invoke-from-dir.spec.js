@@ -2,7 +2,7 @@ import os from 'node:os';
 import {expect} from 'chai';
 import path from 'node:path';
 import fs from 'node:fs/promises';
-import {invokeFromDir} from './autoload.js';
+import {invokeFromDir} from './invoke-from-dir.js';
 
 const createTempDir = async function () {
   const tmpBase = path.join(os.tmpdir(), 'js-autoload-');
