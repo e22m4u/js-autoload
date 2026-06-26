@@ -1,32 +1,35 @@
 ## @e22m4u/js-autoload
 
-Модуль вызова функций из файлов в указанной директории.
+English | [Russian](./README.ru.md)
 
-- Рекурсивный обход вложенных директорий.
-- Передача любого количества аргументов в вызываемые функции.
-- Гарантированный порядок вызова благодаря алфавитно-числовой сортировке.
-- Поддержка асинхронных функций с ожиданием завершения выполнения.
-- Автоматическая фильтрация тестовых файлов (`*.test.js`, `*.spec.js`).
-- Вызов только `export default` функций (классы и другие типы пропускаются).
-- Быстрая остановка выполнения (*fail-fast*) при возникновении ошибок.
+A module for invoking functions from files within a specified directory.
 
-## Содержание
+- Recursive traversal of nested directories.
+- Passing an arbitrary number of arguments to the invoked functions.
+- Guaranteed execution order due to alphanumeric sorting.
+- Support for asynchronous functions with execution completion awaiting.
+- Automatic filtering of test files (`*.test.js`, `*.spec.js`).
+- Invocation of `export default` functions only (classes and other types are
+  skipped).
+- Immediate execution halt (*fail-fast*) upon error occurrence.
 
-- [Установка](#установка)
-- [Использование](#использование)
-  - [Пример работы](#пример-работы)
-  - [Передача аргументов](#передача-аргументов)
-  - [Правила обработки файлов](#правила-обработки-файлов)
-- [Тесты](#тесты)
-- [Лицензия](#лицензия)
+## Contents
 
-## Установка
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Execution example](#execution-example)
+  - [Passing arguments](#passing-arguments)
+  - [File processing rules](#file-processing-rules)
+- [Tests](#tests)
+- [License](#license)
+
+## Installation
 
 ```bash
 npm install @e22m4u/js-autoload
 ```
 
-Модуль поддерживает ESM и CommonJS стандарты.
+The module supports ESM and CommonJS standards.
 
 *ESM*
 
@@ -40,15 +43,15 @@ import {invokeFromDir} from '@e22m4u/js-autoload';
 const {invokeFromDir} = require('@e22m4u/js-autoload');
 ```
 
-## Использование
+## Usage
 
-Функция `invokeFromDir` обходит указанную директорию, находит
-*JavaScript*-файлы, импортирует их и вызывает содержащиеся в них функции,
-если они переданы как экспорт по умолчанию (`export default ...`).
+The `invokeFromDir` function traverses the specified directory, locates
+*JavaScript* files, imports them, and invokes the contained functions if they
+are provided as a default export (`export default ...`).
 
-### Пример работы
+### Execution example
 
-Структура файлов:
+File structure:
 
 ```text
 project/
@@ -58,7 +61,7 @@ project/
   index.js
 ```
 
-Содержимое `01-init.js`
+Contents of `01-init.js`
 
 ```js
 export default function(context) {
@@ -66,7 +69,7 @@ export default function(context) {
 }
 ```
 
-Содержимое `02-process.js`
+Contents of `02-process.js`
 
 ```js
 export default async (context) => {
@@ -74,7 +77,7 @@ export default async (context) => {
 };
 ```
 
-Содержимое `index.js`
+Contents of `index.js`
 
 ```js
 import {invokeFromDir} from '@e22m4u/js-autoload';
@@ -84,10 +87,10 @@ const appState = {
   status: 'pending',
 };
 
-// для ESM
+// for ESM
 await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
 
-// для CommonJS
+// for CommonJS
 // const path = require('path');
 // await invokeFromDir(path.join(__dirname, './scripts'), appState);
 
@@ -95,15 +98,15 @@ console.log(appState);
 // { initialized: true, status: 'done' }
 ```
 
-Рекомендуется передавать абсолютный путь до целевой директории (как это было
-показано выше), так как относительный путь вычисляется от места вызова команды
-`node`, а не от файла в котором используется данная функция-утилита.
+Passing an absolute path to the target directory is recommended (as shown
+above), since a relative path is resolved based on the execution context of
+the `node` command, rather than the file where this utility function is used.
 
-### Передача аргументов
+### Passing arguments
 
-Функция `invokeFromDir` принимает неограниченное количество аргументов
-после пути к директории. Все переданные аргументы будут отправлены в каждую
-вызываемую функцию без изменений.
+The `invokeFromDir` function accepts an unlimited number of arguments after
+the directory path. All provided arguments are forwarded to each invoked
+function without modifications.
 
 ```js
 import {invokeFromDir} from '@e22m4u/js-autoload';
@@ -112,50 +115,50 @@ import {invokeFromDir} from '@e22m4u/js-autoload';
 await invokeFromDir('./src/actions', arg1, arg2, arg3);
 ```
 
-### Правила обработки файлов
+### File processing rules
 
-При вызове функции `invokeFromDir` применяются следующие правила:
+The following rules are applied when invoking the `invokeFromDir` function:
 
-**Рекурсивность**  
-Обрабатываются все файлы в указанной директории и во всех вложенных каталогах.
+**Recursion**  
+All files in the specified directory and all nested subdirectories are
+processed.
 
-**Расширения**  
-Загружаются только файлы с расширениями `.js`, `.mjs` и `.cjs`.
-Файлы с другими расширениями игнорируются.
+**Extensions**  
+Only files with `.js`, `.mjs`, and `.cjs` extensions are loaded. Files with
+other extensions are ignored.
 
-**Исключения**  
-Файлы, имена которых оканчиваются на `.test.js` или `.spec.js`, пропускаются.
+**Exclusions**  
+Files ending in `.test.js` or `.spec.js` are skipped.
 
-**Порядок выполнения**  
-Перед выполнением список путей сортируется по алфавиту с учетом числовых
-значений в строках. Именование файлов с числовыми префиксами
-(`01-*`, `02-*` и т.д.) гарантирует строгую последовательность
-вызова.
+**Execution order**  
+Prior to execution, the list of paths is sorted alphabetically, taking into
+account numeric values in the strings. Naming files with numeric prefixes
+(`01-*`, `02-*`, etc.) guarantees a strict execution sequence.
 
-**Проверка экспорта**  
-Выполняются только функции, предоставленные как `export default`. Именованные
-экспорты игнорируются. Строки, объекты или другие типы данных пропускаются.
+**Export validation**  
+Only functions provided as `export default` are executed. Named exports are
+ignored. Strings, objects, or other data types are skipped.
 
-**Классы**  
-Если экспортом по умолчанию является класс (*ES6 class*), он игнорируется
-и не инстанцируется.
+**Classes**  
+If the default export is a class (*ES6 class*), it is ignored and not
+instantiated.
 
-**Асинхронность**  
-Если функция возвращает `Promise`, выполнение приостанавливается до разрешения
-промиса. Следующий файл будет обработан только после завершения работы
-предыдущего.
+**Asynchrony**  
+If a function returns a `Promise`, execution is suspended until the promise
+is resolved. The next file is processed only after the completion of the
+previous one.
 
-**Ошибки**  
-В случае отсутствия указанной директории или возникновения ошибки внутри
-выполняемой функции, процесс останавливается, и ошибка пробрасывается
-в вызывающий код.
+**Errors**  
+In case of a missing specified directory or an error occurrence within the
+executed function, the process is halted, and the error is thrown to the
+calling code.
 
-## Тесты
+## Tests
 
 ```bash
 npm run test
 ```
 
-## Лицензия
+## License
 
 MIT
