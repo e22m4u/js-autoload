@@ -8,8 +8,8 @@ A zero-configuration module for invoking functions from a specified directory.
 - Passing an arbitrary number of arguments to the invoked functions.
 - Guaranteed execution order due to alphanumeric sorting.
 - Support for asynchronous functions with execution completion awaiting.
-- Automatic filtering of test files (`*.test.js`, `*.spec.js`).
 - Invocation of `export default` functions only (classes and other types are
+- Automatic filtering of test files (`*.test.js`, `*.spec.js`).
   skipped).
 - Immediate execution halt (*fail-fast*) upon error occurrence.
 
