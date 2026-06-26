@@ -1,7 +1,7 @@
 {
   "name": "@e22m4u/js-autoload",
   "version": "0.0.1",
-  "description": "Module to call functions from a specified directory",
+  "description": "A zero-configuration module for invoking functions from a specified directory ",
   "author": "Mikhail Evstropov <e22m4u@yandex.ru>",
   "license": "MIT",
   "keywords": [
