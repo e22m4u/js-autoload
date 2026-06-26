@@ -10,10 +10,10 @@
     "invoke",
     "execute"
   ],
-  "homepage": "https://github.com/e22m4u/js-autoload",
+  "homepage": "https://gitverse.ru/e22m4u/js-autoload",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/e22m4u/js-autoload.git"
+    "url": "git+https://gitverse.ru/e22m4u/js-autoload.git"
   },
   "type": "module",
   "types": "./src/index.d.ts",
