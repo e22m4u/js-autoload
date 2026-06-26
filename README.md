@@ -17,7 +17,7 @@ A module for invoking functions from files within a specified directory.
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [Execution example](#execution-example)
+  - [Basic example](#basic-example)
   - [Passing arguments](#passing-arguments)
   - [File processing rules](#file-processing-rules)
 - [Tests](#tests)
@@ -49,7 +49,7 @@ The `invokeFromDir` function traverses the specified directory, locates
 *JavaScript* files, imports them, and invokes the contained functions if they
 are provided as a default export (`export default ...`).
 
-### Execution example
+### Basic example
 
 File structure:
 
