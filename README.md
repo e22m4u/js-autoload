@@ -9,8 +9,8 @@ A zero-configuration module for invoking functions from a specified directory.
 - Guaranteed execution order due to alphanumeric sorting.
 - Support for asynchronous functions with execution completion awaiting.
 - Invocation of `export default` functions only (classes and other types are
-- Automatic filtering of test files (`*.test.js`, `*.spec.js`).
   skipped).
+- Automatic filtering of test files (`*.test.js`, `*.spec.js`).
 - Immediate execution halt (*fail-fast*) upon error occurrence.
 
 ## Contents
