@@ -2,7 +2,7 @@
 
 English | [Russian](./README.ru.md)
 
-A module for invoking functions from files within a specified directory.
+A zero-configuration module for invoking functions from a specified directory.
 
 - Recursive traversal of nested directories.
 - Passing an arbitrary number of arguments to the invoked functions.
