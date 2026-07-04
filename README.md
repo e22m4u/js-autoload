@@ -68,7 +68,7 @@ project/
 Содержимое `01-init.js`
 
 ```js
-export default function(context) {
+export default function (context) {
   context.initialized = true;
 }
 ```
@@ -77,7 +77,7 @@ export default function(context) {
 
 ```js
 // имитация асинхронного выполнения
-export default async (context) => {
+export default async function (context) {
   context.status = 'done';
 };
 ```
@@ -141,7 +141,7 @@ project/
 Содержимое `01-init.js`
 
 ```js
-module.exports = function(context) {
+module.exports = function (context) {
   context.initialized = true;
 };
 ```
@@ -150,7 +150,7 @@ module.exports = function(context) {
 
 ```js
 // имитация асинхронного выполнения
-module.exports = async (context) => {
+module.exports = async function (context) {
   context.status = 'done';
 };
 ```
