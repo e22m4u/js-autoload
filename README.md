@@ -45,7 +45,10 @@ const {invokeFromDir} = require('@e22m4u/js-autoload');
 
 Функция `invokeFromDir` обходит указанную директорию, находит
 *JavaScript*-файлы, импортирует их и вызывает содержащиеся в них функции,
-если они переданы как экспорт по умолчанию (`export default ...`).
+если они переданы как экспорт по умолчанию.
+
+- Для ESM `export default function() { ... }`
+- Для CJS `module.exports = function() { ... }`
 
 ### Пример работы
 
