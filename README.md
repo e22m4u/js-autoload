@@ -135,14 +135,14 @@ const appState = {
   status: 'pending'
 };
 
-async function bootstrap() {
+async function main() {
   const scriptsDir = path.join(__dirname, './scripts');
 
   await invokeFromDir(scriptsDir, appState);
   console.log('Директория успешно загружена:', appState);
 }
 
-bootstrap().catch(error => {
+main().catch(error => {
   console.error('Возникла ошибка при инициализации:', error);
 });
 ```
