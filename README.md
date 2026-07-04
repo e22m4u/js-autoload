@@ -17,6 +17,7 @@
   - [Пример работы](#пример-работы)
   - [Передача аргументов](#передача-аргументов)
   - [Правила обработки файлов](#правила-обработки-файлов)
+  - [Поддержка CommonJS](#поддержка-commonjs)
 - [Тесты](#тесты)
 - [Лицензия](#лицензия)
 
@@ -110,6 +111,40 @@ import {invokeFromDir} from '@e22m4u/js-autoload';
 
 // ...
 await invokeFromDir('./src/actions', arg1, arg2, arg3);
+```
+
+### Поддержка CommonJS
+
+Современный стандарт *ESM* позволяет применять оператор `await` на самом верхнем
+уровне модуля. Устаревший стандарт *CommonJS* не поддерживает такую возможность.
+Использование оператора `await` в корневом пространстве файла *CommonJS*
+приводит к синтаксической ошибке.
+
+Для обхода описанного ограничения создается асинхронная функция инициализации.
+Внутри такой функции оператор `await` работает в штатном режиме. Вся стартовая
+логика приложения помещается в тело указанной функции.
+
+Пример реализации подобного подхода приведен далее.
+
+```javascript
+const path = require('path');
+const {invokeFromDir} = require('@e22m4u/js-autoload');
+
+const appState = {
+  initialized: false,
+  status: 'pending'
+};
+
+async function bootstrap() {
+  const scriptsDir = path.join(__dirname, './scripts');
+
+  await invokeFromDir(scriptsDir, appState);
+  console.log('Директория успешно загружена:', appState);
+}
+
+bootstrap().catch(error => {
+  console.error('Возникла ошибка при инициализации:', error);
+});
 ```
 
 ### Правила обработки файлов
