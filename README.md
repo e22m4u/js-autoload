@@ -76,6 +76,7 @@ export default function(context) {
 Содержимое `02-process.js`
 
 ```js
+// имитация асинхронного выполнения
 export default async (context) => {
   context.status = 'done';
 };
@@ -92,7 +93,7 @@ const appState = {
 };
 
 await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
-// import.meta.dirname доступен только для ESM
+// import.meta.dirname доступен только для Node.js 20.11 и выше
 
 console.log(appState); 
 // { initialized: true, status: 'done' }
@@ -124,9 +125,37 @@ await invokeFromDir('./src/actions', arg1, arg2, arg3);
 
 Для обхода описанного ограничения создается асинхронная функция инициализации.
 Внутри такой функции оператор `await` работает в штатном режиме. Вся стартовая
-логика приложения помещается в тело указанной функции.
+логика приложения помещается в тело указанной функции. Пример реализации
+подобного подхода приведен далее.
 
-Пример реализации подобного подхода приведен далее.
+Структура файлов:
+
+```text
+project/
+  scripts/
+    01-init.js
+    02-process.js
+  index.js
+```
+
+Содержимое `01-init.js`
+
+```js
+module.exports = function(context) {
+  context.initialized = true;
+};
+```
+
+Содержимое `02-process.js`
+
+```js
+// имитация асинхронного выполнения
+module.exports = async (context) => {
+  context.status = 'done';
+};
+```
+
+Содержимое `index.js`
 
 ```javascript
 const path = require('path');
@@ -139,13 +168,18 @@ const appState = {
 
 async function main() {
   await invokeFromDir(path.join(__dirname, './scripts'), appState);
-  console.log('Директория успешно загружена:', appState);
+  console.log(appState);
+  // { initialized: true, status: 'done' }
 }
 
-main().catch(error => {
-  console.error('Возникла ошибка при инициализации:', error);
-});
+main();
 ```
+
+Утилита `invokeFromDir` выполняет исключительно функции, которые экспортированы
+по умолчанию. При работе со стандартом *CommonJS* присвоение целевой функции
+объекту `module.exports` автоматически трактуется средой выполнения как экспорт
+по умолчанию. По этой причине подобные функции успешно распознаются
+и вызываются данной утилитой.
 
 ### Правила обработки файлов
 
