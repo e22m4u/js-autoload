@@ -49,6 +49,12 @@ const {invokeFromDir} = require('@e22m4u/js-autoload');
 
 ### Пример работы
 
+Приведенный ниже пример предназначен для стандарта *ESM*. Данное уточнение
+обусловлено применением оператора `await` на верхнем уровне модуля. Подобный
+синтаксис нативно поддерживается спецификацией *ESM*, но вызывает синтаксическую
+ошибку в контексте *CommonJS*. Реализация аналогичной логики для *CommonJS*
+описана в разделе [«Поддержка CommonJS»](#поддержка-commonjs).
+
 Структура файлов:
 
 ```text
@@ -85,12 +91,8 @@ const appState = {
   status: 'pending',
 };
 
-// для ESM
 await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
-
-// для CommonJS
-// const path = require('path');
-// await invokeFromDir(path.join(__dirname, './scripts'), appState);
+// import.meta.dirname доступен только для ESM
 
 console.log(appState); 
 // { initialized: true, status: 'done' }
@@ -136,9 +138,7 @@ const appState = {
 };
 
 async function main() {
-  const scriptsDir = path.join(__dirname, './scripts');
-
-  await invokeFromDir(scriptsDir, appState);
+  await invokeFromDir(path.join(__dirname, './scripts'), appState);
   console.log('Директория успешно загружена:', appState);
 }
 
