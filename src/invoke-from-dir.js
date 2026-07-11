@@ -3,19 +3,17 @@ import fs from 'node:fs/promises';
 import {pathToFileURL} from 'node:url';
 
 /**
- * Рекурсивно собирает пути ко всем файлам в директории.
+ * Собирает пути ко всем файлам в указанной директории (без рекурсии).
  *
- * @param   {string}   dirPath      Путь к директории.
- * @param   {string[]} arrayOfFiles Массив для накопления путей (используется при рекурсии).
- * @returns {Promise<string[]>}     Массив абсолютных путей к файлам.
+ * @param   {string} dirPath    Путь к директории.
+ * @returns {Promise<string[]>} Массив абсолютных путей к файлам.
  */
-async function getFilesRecursively(dirPath, arrayOfFiles = []) {
+async function getFiles(dirPath) {
+  const arrayOfFiles = [];
   const entries = await fs.readdir(dirPath, {withFileTypes: true});
   for (const entry of entries) {
-    const fullPath = path.join(dirPath, entry.name);
-    if (entry.isDirectory()) {
-      await getFilesRecursively(fullPath, arrayOfFiles);
-    } else {
+    if (entry.isFile()) {
+      const fullPath = path.join(dirPath, entry.name);
       arrayOfFiles.push(fullPath);
     }
   }
@@ -24,15 +22,15 @@ async function getFilesRecursively(dirPath, arrayOfFiles = []) {
 
 /**
  * Автоматически загружает и вызывает функции по умолчанию (export default)
- * из всех файлов в указанной директории и её поддиректориях.
+ * из всех файлов в указанной директории (без поддиректорий).
  *
  * @param   {string} directoryPath Абсолютный путь к папке (например, папка routes, models).
  * @param   {...any} args          Аргументы, которые будут переданы в каждую функцию при вызове.
  * @returns {Promise<void>}
  */
 export async function invokeFromDir(directoryPath, ...args) {
-  // рекурсивный сбор всех файлов в директории
-  const allFiles = await getFilesRecursively(directoryPath);
+  // сбор всех файлов в директории
+  const allFiles = await getFiles(directoryPath);
   // фильтрация, остаются только JS файлы,
   // исключаются тесты и маппинги
   const allowedExtensions = ['.js', '.mjs', '.cjs'];

@@ -38,18 +38,23 @@ describe('invokeFromDir', function () {
     }
   });
 
-  it('should look for files recursively', async function () {
+  it('should ignore files in subdirectories', async function () {
     const tempDir = await createTempDir();
     try {
-      const subDir = path.join(tempDir, 'nested/level/deep');
+      const subDir = path.join(tempDir, 'nested/level');
       await fs.mkdir(subDir, {recursive: true});
       await fs.writeFile(
         path.join(subDir, 'action.js'),
-        'export default (ctx) => ctx.ran = true',
+        'export default (ctx) => ctx.nestedRan = true',
       );
-      const context = {ran: false};
+      await fs.writeFile(
+        path.join(tempDir, 'root-action.js'),
+        'export default (ctx) => ctx.rootRan = true',
+      );
+      const context = {nestedRan: false, rootRan: false};
       await invokeFromDir(tempDir, context);
-      expect(context.ran).to.be.true;
+      expect(context.rootRan).to.be.true;
+      expect(context.nestedRan).to.be.false;
     } finally {
       await fs.rm(tempDir, {recursive: true, force: true});
     }

@@ -39,21 +39,20 @@ module.exports = __toCommonJS(index_exports);
 var import_node_path = __toESM(require("node:path"), 1);
 var import_promises = __toESM(require("node:fs/promises"), 1);
 var import_node_url = require("node:url");
-async function getFilesRecursively(dirPath, arrayOfFiles = []) {
+async function getFiles(dirPath) {
+  const arrayOfFiles = [];
   const entries = await import_promises.default.readdir(dirPath, { withFileTypes: true });
   for (const entry of entries) {
-    const fullPath = import_node_path.default.join(dirPath, entry.name);
-    if (entry.isDirectory()) {
-      await getFilesRecursively(fullPath, arrayOfFiles);
-    } else {
+    if (entry.isFile()) {
+      const fullPath = import_node_path.default.join(dirPath, entry.name);
       arrayOfFiles.push(fullPath);
     }
   }
   return arrayOfFiles;
 }
-__name(getFilesRecursively, "getFilesRecursively");
+__name(getFiles, "getFiles");
 async function invokeFromDir(directoryPath, ...args) {
-  const allFiles = await getFilesRecursively(directoryPath);
+  const allFiles = await getFiles(directoryPath);
   const allowedExtensions = [".js", ".mjs", ".cjs"];
   const validFiles = allFiles.filter((file) => {
     const ext = import_node_path.default.extname(file).toLowerCase();
