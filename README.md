@@ -101,32 +101,32 @@ const {invokeFromDir} = require('@e22m4u/js-autoload');
 обусловлено применением оператора `await` на верхнем уровне модуля. Подобный
 синтаксис нативно поддерживается *ESM* режимом, но вызывает синтаксическую
 ошибку в *CommonJS*. Реализация аналогичной логики для *CommonJS* описана
-в разделе [«Поддержка CommonJS»](#поддержка-commonjs).
+в разделе [*«Поддержка CommonJS»*](#поддержка-commonjs).
 
 Структура файлов:
 
 ```text
 project/
-  scripts/
-    01-init.js
-    02-process.js
+  boot/
+    logger.js
+    database.js
   index.js
 ```
 
-Содержимое `01-init.js`
+Содержимое `logger.js`
 
 ```js
 export default function(context) {
-  context.initialized = true;
+  context.loggerReady = true;
 }
 ```
 
-Содержимое `02-process.js`
+Содержимое `database.js`
 
 ```js
 // имитация асинхронного выполнения
 export default async function(context) {
-  context.status = 'done';
+  context.dbConnected = true;
 };
 ```
 
@@ -136,15 +136,15 @@ export default async function(context) {
 import {invokeFromDir} from '@e22m4u/js-autoload';
 
 const appState = {
-  initialized: false,
-  status: 'pending',
+  loggerReady: false,
+  dbConnected: false,
 };
 
-await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
+await invokeFromDir(`${import.meta.dirname}/boot`, appState);
 // import.meta.dirname доступен только для Node.js 20.11 и выше
 
-console.log(appState); 
-// { initialized: true, status: 'done' }
+console.log(appState);
+// { loggerReady: true, dbConnected: true }
 ```
 
 Рекомендуется передавать абсолютный путь до целевой директории (как это показано
@@ -179,26 +179,26 @@ await invokeFromDir('./src/actions', arg1, arg2, arg3);
 
 ```text
 project/
-  scripts/
-    01-init.js
-    02-process.js
+  boot/
+    logger.js
+    database.js
   index.js
 ```
 
-Содержимое `01-init.js`
+Содержимое `logger.js`
 
 ```js
 module.exports = function(context) {
-  context.initialized = true;
+  context.loggerReady = true;
 };
 ```
 
-Содержимое `02-process.js`
+Содержимое `database.js`
 
 ```js
 // имитация асинхронного выполнения
 module.exports = async function(context) {
-  context.status = 'done';
+  context.dbConnected = true;
 };
 ```
 
@@ -209,14 +209,14 @@ const path = require('path');
 const {invokeFromDir} = require('@e22m4u/js-autoload');
 
 const appState = {
-  initialized: false,
-  status: 'pending'
+  loggerReady: false,
+  dbConnected: false
 };
 
 async function main() {
-  await invokeFromDir(path.join(__dirname, './scripts'), appState);
+  await invokeFromDir(path.join(__dirname, './boot'), appState);
   console.log(appState);
-  // { initialized: true, status: 'done' }
+  // { loggerReady: true, dbConnected: true }
 }
 
 main();
