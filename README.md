@@ -107,26 +107,26 @@ const {invokeFromDir} = require('@e22m4u/js-autoload');
 
 ```text
 project/
-  boot/
-    logger.js
-    database.js
+  scripts/
+    01-init.js
+    02-process.js
   index.js
 ```
 
-Содержимое `logger.js`
+Содержимое `01-init.js`
 
 ```js
 export default function(context) {
-  context.loggerReady = true;
+  context.initialized = true;
 }
 ```
 
-Содержимое `database.js`
+Содержимое `02-process.js`
 
 ```js
 // имитация асинхронного выполнения
 export default async function(context) {
-  context.dbConnected = true;
+  context.status = 'done';
 };
 ```
 
@@ -136,15 +136,15 @@ export default async function(context) {
 import {invokeFromDir} from '@e22m4u/js-autoload';
 
 const appState = {
-  loggerReady: false,
-  dbConnected: false,
+  initialized: false,
+  status: 'pending',
 };
 
-await invokeFromDir(`${import.meta.dirname}/boot`, appState);
+await invokeFromDir(`${import.meta.dirname}/scripts`, appState);
 // import.meta.dirname доступен только для Node.js 20.11 и выше
 
-console.log(appState);
-// { loggerReady: true, dbConnected: true }
+console.log(appState); 
+// { initialized: true, status: 'done' }
 ```
 
 Рекомендуется передавать абсолютный путь до целевой директории (как это показано
@@ -179,26 +179,26 @@ await invokeFromDir('./src/actions', arg1, arg2, arg3);
 
 ```text
 project/
-  boot/
-    logger.js
-    database.js
+  scripts/
+    01-init.js
+    02-process.js
   index.js
 ```
 
-Содержимое `logger.js`
+Содержимое `01-init.js`
 
 ```js
 module.exports = function(context) {
-  context.loggerReady = true;
+  context.initialized = true;
 };
 ```
 
-Содержимое `database.js`
+Содержимое `02-process.js`
 
 ```js
 // имитация асинхронного выполнения
 module.exports = async function(context) {
-  context.dbConnected = true;
+  context.status = 'done';
 };
 ```
 
@@ -209,14 +209,14 @@ const path = require('path');
 const {invokeFromDir} = require('@e22m4u/js-autoload');
 
 const appState = {
-  loggerReady: false,
-  dbConnected: false
+  initialized: false,
+  status: 'pending'
 };
 
 async function main() {
-  await invokeFromDir(path.join(__dirname, './boot'), appState);
+  await invokeFromDir(path.join(__dirname, './scripts'), appState);
   console.log(appState);
-  // { loggerReady: true, dbConnected: true }
+  // { initialized: true, status: 'done' }
 }
 
 main();
