@@ -1,5 +1,8 @@
 ## @e22m4u/js-autoload
 
+![npm version](https://badge.fury.io/js/@e22m4u%2Fjs-autoload.svg)
+![license](https://img.shields.io/badge/license-mit-blue.svg)
+
 Модуль с нулевой конфигурацией для вызова функций из указанной директории.
 
 - Обход файлов строго в указанной директории (без рекурсии).
