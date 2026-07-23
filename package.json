@@ -1,7 +1,7 @@
 {
   "name": "@e22m4u/js-autoload",
   "version": "0.0.2",
-  "description": "Модуль вызова функций из указанной директории",
+  "description": "Module for invoking functions from a specified directory",
   "author": "Mikhail Evstropov <e22m4u@yandex.ru>",
   "license": "MIT",
   "keywords": [
