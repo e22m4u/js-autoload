@@ -1,6 +1,6 @@
 {
   "name": "@e22m4u/js-autoload",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Модуль автозагрузки для вызова функций из директории",
   "author": "Mikhail Evstropov <e22m4u@yandex.ru>",
   "license": "MIT",
